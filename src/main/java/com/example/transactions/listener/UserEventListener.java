@@ -28,10 +28,11 @@ public class UserEventListener {
     }
 
     @TransactionalEventListener(UserCreatedEvent.class)
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Async
+    @Transactional
     public void onTUserCreateEvent(UserCreatedEvent event) {
-        User user = userRepository.findById(event.getUser().getId()).get();
+        Long id = event.getUser().getId();
+        User user = userRepository.findById(id).orElse(null);
 
         user.setName("foo2");
 
